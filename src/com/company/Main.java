@@ -7,7 +7,6 @@ public class Main {
     public static final char EMPTY = '-';
     public static final char CROSS = 'X';
     public static final char ZERO = 'O';
-
     public static void main(String[] args) {
         char[][] field = new char[SIZE][SIZE];
         for (int i = 0; i < SIZE; i++) {
@@ -27,7 +26,6 @@ public class Main {
             String[] parts = input.split(" "); // ["2" , "3"]
             int r = Integer.parseInt(parts[0]) - 1; // 2-1 = 1
             int c = Integer.parseInt(parts[1]) - 1; // 3-1 = 2
-
             if (field[r][c] != EMPTY) {
                 System.out.println("Сюда ходить нельзя");
                 continue;
@@ -44,7 +42,6 @@ public class Main {
                 } else {
                     isCrossTurn = true;
                 }
-                //isCrossTurn = !isCrossTurn;
             }
         }
 
@@ -55,26 +52,36 @@ public class Main {
     // Работает только для 3x3
     // Этот метод вам и надо переписать
     public static boolean isWin(char[][] field, char player) {
-        if (field[0][0] == player && field[0][1] == player && field[0][2] == player)
-            return true;
-        if (field[1][0] == player && field[1][1] == player && field[1][2] == player)
-            return true;
-        if (field[2][0] == player && field[2][1] == player && field[2][2] == player)
-            return true;
+        int countPlayerRow = 0;
+        int countPlayerColumn = 0;
+        int countPlayerUpDown = 0;
+        int countPlayerDownUp = 0;
+        boolean win = false;
+        for (int column = 0; column < SIZE; column++) {
 
-        if (field[0][0] == player && field[1][0] == player && field[2][0] == player)
-            return true;
-        if (field[0][1] == player && field[1][1] == player && field[2][1] == player)
-            return true;
-        if (field[0][2] == player && field[1][2] == player && field[2][2] == player)
-            return true;
+            for (int row = 0; row < SIZE; row++) {
 
-        if (field[0][0] == player && field[1][1] == player && field[2][2] == player)
-            return true;
-        if (field[2][0] == player && field[1][1] == player && field[0][2] == player)
-            return true;
+                if (field[column][row] == player) {
+                    countPlayerRow++;
+                }
+                if (field[row][column] == player) {
+                    countPlayerColumn++;
+                }
+                if ((column == row) && (field[column][row] == player)) {
+                    countPlayerUpDown++;
+                }
+                if ((column == (SIZE-row-1)) && (field[column][row] == player)) {
+                    countPlayerDownUp++;
+                }
+            }
+            if ((countPlayerRow == SIZE || (countPlayerColumn == SIZE) || (countPlayerDownUp == SIZE) || (countPlayerUpDown == SIZE))) {
+                win = true;
+            }
+            countPlayerRow = 0;
+            countPlayerColumn = 0;
+        }
 
-        return false;
+        return win;
     }
 
     public static void printField(char[][] field) {
